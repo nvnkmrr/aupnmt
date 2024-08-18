@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aupnmt.AupnmtApplication;
@@ -24,6 +25,9 @@ import com.aupnmt.service.OwnerService;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
+	
+	@Autowired
+	AzureStorageServiceImpl azureStorageServiceImpl;
 
 	@Override
 	public String owner(Owner owner) throws IOException, URISyntaxException {
@@ -73,12 +77,10 @@ public class OwnerServiceImpl implements OwnerService {
 	}
 
 	@Override
-	public Owner owner(String PhoneNumber) throws IOException, URISyntaxException {
+	public Owner owner(String PhoneNumber) throws Exception {
 		Owner owner = new Owner();
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Owner");
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Owner");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {
@@ -107,11 +109,10 @@ public class OwnerServiceImpl implements OwnerService {
 	}
 
 	@Override
-	public String findOwner(String PhoneNumber) throws IOException, URISyntaxException {
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Owner");
+	public String findOwner(String PhoneNumber) throws Exception {
+		
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Owner");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {

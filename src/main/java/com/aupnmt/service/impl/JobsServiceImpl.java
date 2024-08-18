@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aupnmt.AupnmtApplication;
@@ -26,6 +27,9 @@ import com.aupnmt.service.JobsService;
 
 @Service
 public class JobsServiceImpl implements JobsService {
+
+	@Autowired
+	AzureStorageServiceImpl azureStorageServiceImpl;
 
 	@Override
 	public String job(Jobs jobs) throws IOException, URISyntaxException {
@@ -58,12 +62,10 @@ public class JobsServiceImpl implements JobsService {
 	}
 
 	@Override
-	public List<Jobs> jobs(boolean flag) throws IOException, URISyntaxException {
+	public List<Jobs> jobs(boolean flag) throws Exception {
 		List<Jobs> jobs = new ArrayList<Jobs>();
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Jobs");
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Jobs");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {
@@ -98,12 +100,10 @@ public class JobsServiceImpl implements JobsService {
 	}
 
 	@Override
-	public List<Jobs> jobs(String phoneNumber) throws IOException, URISyntaxException {
+	public List<Jobs> jobs(String phoneNumber) throws Exception {
 		List<Jobs> jobs = new ArrayList<Jobs>();
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Jobs");
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Jobs");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {

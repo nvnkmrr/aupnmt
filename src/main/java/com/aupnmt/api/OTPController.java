@@ -10,16 +10,22 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aupnmt.configuraion.JwtTokenUtil;
 import com.aupnmt.dto.AccessToken;
+import com.aupnmt.dto.Otp;
 import com.aupnmt.dto.Response;
 import com.aupnmt.service.OtpService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 @RestController
+@Tag(name = "OTP", description = "OTP APIs")
 public class OTPController {
 
 	@Autowired
@@ -35,40 +41,39 @@ public class OTPController {
 	OtpService otpService;
 
 	@PostMapping("/otpGenerate")
-	public Response otpGenerate(@RequestParam String phoneNumber) {
-
-		Integer otp = otpService.generateOTP(phoneNumber, true);
+	public Response otpGenerate(@RequestBody Otp otpp) {
+		Integer otp = otpService.generateOTP(otpp.getPhoneNumber(), true);
 		System.out.println(otp);
 		Response response = new Response();
 		if (otp != 0) {
-			response.setMessage("OTP generated and sent successfully to the Phone Number: " + phoneNumber);
+			response.setMessage("OTP generated and sent successfully to the Phone Number: " + otpp.getPhoneNumber());
 			response.setStatus("Success");
 		} else {
-			response.setMessage("OTP generation is failed to the Phone Number: " + phoneNumber);
+			response.setMessage("OTP generation is failed to the Phone Number: " + otpp.getPhoneNumber());
 			response.setStatus("Failure");
 		}
 		return response;
 	}
 
 	@PostMapping("/otpValidate")
-	public Response otpValidate(@RequestParam String phoneNumber, @RequestParam Integer otp) throws Exception {
+	public Response otpValidate(@RequestBody Otp Otp) throws Exception {
 		Response response = new Response();
 		try {
-			authenticate(phoneNumber, otp.toString());
-			final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(phoneNumber);
+			authenticate(Otp.getPhoneNumber(), Otp.getOtp().toString());
+			final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(Otp.getPhoneNumber());
 			final String token = jwtTokenUtil.generateToken(userDetails);
 			AccessToken accessToken = new AccessToken();
 			accessToken.setAccessToken(token);
 			response.setData(accessToken);
-			response.setMessage("OTP verified successfully to the Phone Number: " + phoneNumber);
+			response.setMessage("OTP verified successfully to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Success");
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			response.setMessage("OTP verification is failed to the Phone Number: " + phoneNumber);
+			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.setMessage("OTP verification is failed to the Phone Number: " + phoneNumber);
+			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		}
 		return response;

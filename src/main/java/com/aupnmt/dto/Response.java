@@ -1,11 +1,8 @@
 package com.aupnmt.dto;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -15,7 +12,7 @@ public class Response {
 	private String status;
 	private String message;
 	@JsonProperty(value = "data", required = true)
-	private String data;
+	private Object data;
 
 	public String getStatus() {
 		return status;
@@ -33,17 +30,12 @@ public class Response {
 		this.message = message;
 	}
 
-	public String getData() {
+	public Object getData() {
 		return data;
 	}
 
 	public void setData(Object data) throws JsonProcessingException {
-		if(Objects.nonNull(data)) {
-			this.data = new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(data);
-		}else {
-			this.data = "";
-		}
-		
+		this.data = data;
 	}
 
 }

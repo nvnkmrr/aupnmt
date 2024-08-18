@@ -12,7 +12,12 @@ import com.aupnmt.dto.Admin;
 import com.aupnmt.dto.Response;
 import com.aupnmt.service.AdminService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Admin", description = "Admin APIs")
 public class AdminController {
 
 	@Autowired

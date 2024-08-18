@@ -12,8 +12,8 @@ public interface OwnerService {
 
 	String owner(Owner owner) throws IOException, URISyntaxException;
 
-	Owner owner(String PhoneNumber) throws IOException, URISyntaxException;
+	Owner owner(String PhoneNumber) throws Exception;
 	
-	String findOwner(String PhoneNumber) throws IOException, URISyntaxException;
+	String findOwner(String PhoneNumber) throws Exception;
 
 }

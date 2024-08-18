@@ -14,7 +14,12 @@ import com.aupnmt.dto.Employee;
 import com.aupnmt.dto.Response;
 import com.aupnmt.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Employee", description = "Employee APIs")
 public class EmployeeController {
 
 	@Autowired

@@ -20,7 +20,10 @@ import com.aupnmt.service.CommonService;
 import com.aupnmt.service.OtpService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "Login", description = "Login APIs")
 public class CommonController {
 
 	@Autowired
@@ -57,9 +60,11 @@ public class CommonController {
 				response.setStatus("Failure");
 			}
 		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		}

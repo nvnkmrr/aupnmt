@@ -11,6 +11,6 @@ import com.aupnmt.dto.Professions;
 @Service
 public interface ProfessionsService {
 
-	List<Professions> professions() throws IOException, URISyntaxException;
+	List<Professions> professions() throws Exception;
 	
 }

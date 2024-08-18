@@ -17,8 +17,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.aupnmt.filter.JwtRequestFilter;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(
+        name = "Authorization",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class WebSecurityConfig {
 
 	@Autowired

@@ -1,11 +1,5 @@
 package com.aupnmt.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,28 +7,23 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.aupnmt.AupnmtApplication;
 import com.aupnmt.dto.Professions;
 import com.aupnmt.service.ProfessionsService;
 
 @Service
 public class ProfessionsServiceImpl implements ProfessionsService {
 
-	@Value("${database.excel.file}")
-	private String databaseFile;
+	@Autowired
+	AzureStorageServiceImpl azureStorageServiceImpl;
 
 	@Override
-	public List<Professions> professions() throws IOException, URISyntaxException {
+	public List<Professions> professions() throws Exception {
 
-		@SuppressWarnings("resource")
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString())))
-				.getSheet("Professions");
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Professions");
 		List<Professions> data = new ArrayList<>();
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = false;

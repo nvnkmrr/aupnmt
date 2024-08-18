@@ -39,14 +39,14 @@ public class OtpServiceImpl implements OtpService {
 	public int generateOTP(String phoneNumber, Boolean flag) {
 		int otp = 0;
 		if (flag) {
-			otp = new Random().nextInt(999999);
+			otp = (100000 + new Random().nextInt(900000));
 		} else {
 			otp = 000000;
 		}
-		 String response= sendOTP(otp, phoneNumber);
-		 if(response.equalsIgnoreCase("Failure")) {
-		 return 0;
-		 }
+//		 String response= sendOTP(otp, phoneNumber);
+//		 if(response.equalsIgnoreCase("Failure")) {
+//		 return 0;
+//		 }
 		return otp;
 	}
 

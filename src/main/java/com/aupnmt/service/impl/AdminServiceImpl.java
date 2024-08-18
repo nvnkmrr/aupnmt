@@ -2,8 +2,6 @@ package com.aupnmt.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -11,6 +9,7 @@ import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aupnmt.AupnmtApplication;
@@ -20,14 +19,15 @@ import com.aupnmt.service.AdminService;
 @Service
 public class AdminServiceImpl implements AdminService {
 
+	@Autowired
+	AzureStorageServiceImpl azureStorageServiceImpl;
+
 	@Override
-	public Admin admin(String PhoneNumber) throws IOException, URISyntaxException {
+	public Admin admin(String PhoneNumber) throws Exception {
 
 		Admin admin = new Admin();
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Admin");
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Admin");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {
@@ -56,13 +56,11 @@ public class AdminServiceImpl implements AdminService {
 		return admin;
 
 	}
-	
+
 	@Override
-	public String findAdmin(String PhoneNumber) throws IOException, URISyntaxException {
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		XSSFSheet xSSFSheet = new XSSFWorkbook(new FileInputStream(new File(database.toString()))).getSheet("Admin");
+	public String findAdmin(String PhoneNumber) throws Exception {
+		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Admin");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
 		while (rowIterator.hasNext()) {

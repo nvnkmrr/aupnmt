@@ -14,7 +14,12 @@ import com.aupnmt.dto.Owner;
 import com.aupnmt.dto.Response;
 import com.aupnmt.service.OwnerService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Owner", description = "Owner APIs")
 public class OwnerController {
 
 	@Autowired

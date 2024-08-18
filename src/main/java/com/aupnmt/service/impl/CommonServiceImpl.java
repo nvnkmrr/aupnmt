@@ -1,8 +1,5 @@
 package com.aupnmt.service.impl;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +22,7 @@ public class CommonServiceImpl implements CommonService {
 	AdminService adminService;
 
 	@Override
-	public AccessToken userIdentification(String phoneNumber) throws IOException, URISyntaxException {
+	public AccessToken userIdentification(String phoneNumber) throws Exception {
 		AccessToken accessToken = new AccessToken();
 		String employeeIdentification = employeeService.findEmployee(phoneNumber);
 		String ownerIdentification = ownerService.findOwner(phoneNumber);
