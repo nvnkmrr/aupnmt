@@ -43,10 +43,12 @@ public class OtpServiceImpl implements OtpService {
 		} else {
 			otp = 000000;
 		}
-		 String response= sendOTP(otp, phoneNumber);
-		 if(response.equalsIgnoreCase("Failure")) {
-		 return 0;
-		 }
+		if (otp != 0) {
+			String response = sendOTP(otp, phoneNumber);
+			if (response.equalsIgnoreCase("Failure")) {
+				return 0;
+			}
+		}
 		return otp;
 	}
 

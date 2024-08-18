@@ -81,6 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		workbook.write(bos);
 		blobClient.upload(new ByteArrayInputStream(bos.toByteArray()));
+		workbook.close();
 		return "Successfully created new employee with Id:" + newId;
 	}
 

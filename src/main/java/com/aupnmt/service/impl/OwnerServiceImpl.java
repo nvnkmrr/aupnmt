@@ -1,41 +1,48 @@
 package com.aupnmt.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.aupnmt.AupnmtApplication;
 import com.aupnmt.dto.Owner;
 import com.aupnmt.service.OwnerService;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
 	
 	@Autowired
 	AzureStorageServiceImpl azureStorageServiceImpl;
+	
+	@Value("${azure.storage.blob.endpoint}")
+	private String storageEndPoint;
+
+	@Value("${azure.storage.blob.container}")
+	private String storageContainer;
+
+	@Value("${azure.storage.blob.filename}")
+	private String filename;
 
 	@Override
 	public String owner(Owner owner) throws IOException, URISyntaxException {
-		Path database = ((Paths.get(AupnmtApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-				.getParent().normalize().toAbsolutePath()).getParent().normalize().toAbsolutePath())
-				.resolve("Database.xlsx");
-		File file = new File(database.toString());
-		Workbook workbook = WorkbookFactory.create(new FileInputStream(file));
+		BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().endpoint(storageEndPoint).buildClient();
+		BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(storageContainer);
+		BlobClient blobClient = containerClient.getBlobClient(filename);
+		XSSFWorkbook workbook = new XSSFWorkbook(blobClient.openInputStream());
 		Sheet sheet = workbook.getSheet("Owner");
 		int lastRowNumber = sheet.getLastRowNum();
 		Long newId = 0L;
@@ -70,9 +77,10 @@ public class OwnerServiceImpl implements OwnerService {
 		row.createCell(13).setCellValue(owner.getCreatedDt());
 		row.createCell(14).setCellValue(owner.getModifiedDt());
 
-		FileOutputStream fileOutputStream = new FileOutputStream(file);
-		workbook.write(fileOutputStream);
-		fileOutputStream.close();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		workbook.write(bos);
+		blobClient.upload(new ByteArrayInputStream(bos.toByteArray()));
+		workbook.close();
 		return "Successfully created new owner with Id:" + newId;
 	}
 
