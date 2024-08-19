@@ -36,11 +36,9 @@ public class EmployeeController {
 			else
 				response.setStatus("Success");
 		} catch (IOException e) {
-			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new employee");
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new employee");
 		}

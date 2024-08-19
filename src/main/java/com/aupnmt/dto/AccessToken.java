@@ -5,6 +5,7 @@ public class AccessToken {
 	private String accessToken;
 	private String role;
 	private boolean premiumUser;
+	private boolean applicationSubmittedStatus;
 
 	public String getAccessToken() {
 		return accessToken;
@@ -29,5 +30,14 @@ public class AccessToken {
 	public void setPremiumUser(boolean premiumUser) {
 		this.premiumUser = premiumUser;
 	}
+
+	public boolean isApplicationSubmittedStatus() {
+		return applicationSubmittedStatus;
+	}
+
+	public void setApplicationSubmittedStatus(boolean applicationSubmittedStatus) {
+		this.applicationSubmittedStatus = applicationSubmittedStatus;
+	}
+	
 
 }

@@ -16,8 +16,6 @@ public class Employee {
 	private String currentAddress;
 	private String permanentAddress;
 	private Boolean premiumUser;
-	private LocalDate createdDt;
-	private LocalDate modifiedDt;
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -113,22 +111,6 @@ public class Employee {
 
 	public void setPremiumUser(Boolean premiumUser) {
 		this.premiumUser = premiumUser;
-	}
-
-	public LocalDate getCreatedDt() {
-		return createdDt;
-	}
-
-	public void setCreatedDt(LocalDate createdDt) {
-		this.createdDt = createdDt;
-	}
-
-	public LocalDate getModifiedDt() {
-		return modifiedDt;
-	}
-
-	public void setModifiedDt(LocalDate modifiedDt) {
-		this.modifiedDt = modifiedDt;
 	}
 
 }

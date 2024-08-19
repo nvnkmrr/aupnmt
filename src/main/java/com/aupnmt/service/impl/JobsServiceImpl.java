@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +49,7 @@ public class JobsServiceImpl implements JobsService {
 		Sheet sheet = workbook.getSheet("Jobs");
 		int lastRowNumber = sheet.getLastRowNum();
 		Long newId = 0L;
+		LocalDate localDate = LocalDate.now();
 
 		if (sheet.getRow(lastRowNumber).getCell(0).getCellType() == CellType.STRING) {
 			newId = 1L;
@@ -58,9 +60,9 @@ public class JobsServiceImpl implements JobsService {
 		row.createCell(0).setCellValue(newId);
 		row.createCell(1).setCellValue(jobs.getJobPostedBy());
 		row.createCell(2).setCellValue(jobs.getJobDetails());
-		row.createCell(3).setCellValue("Y");
-		row.createCell(4).setCellValue(jobs.getCreatedDt());
-		row.createCell(5).setCellValue(jobs.getModifiedDt());
+		row.createCell(3).setCellValue(jobs.isActive()?"Y":"N");
+		row.createCell(4).setCellValue(localDate);
+		row.createCell(5).setCellValue(localDate);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		workbook.write(bos);
 		blobClient.upload(new ByteArrayInputStream(bos.toByteArray()));
@@ -142,6 +144,7 @@ public class JobsServiceImpl implements JobsService {
 		Sheet sheet = workbook.getSheet("Jobs");
 		Iterator<Row> rowIterator = sheet.iterator();
 		boolean skipHeader = true;
+		LocalDate localDate = LocalDate.now();
 		while (rowIterator.hasNext()) {
 			// skipping header
 			if (skipHeader) {
@@ -153,6 +156,7 @@ public class JobsServiceImpl implements JobsService {
 			Long id = new Double(row.getCell(0).getNumericCellValue()).longValue();
 			if (id.equals(jobId)) {
 				row.getCell(3).setCellValue("N");
+				row.getCell(5).setCellValue(localDate);
 			}
 		}
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -171,6 +175,7 @@ public class JobsServiceImpl implements JobsService {
 		Sheet sheet = workbook.getSheet("Jobs");
 		Iterator<Row> rowIterator = sheet.iterator();
 		boolean skipHeader = true;
+		LocalDate localDate = LocalDate.now();
 		while (rowIterator.hasNext()) {
 			// skipping header
 			if (skipHeader) {
@@ -182,6 +187,7 @@ public class JobsServiceImpl implements JobsService {
 			Long id = new Double(row.getCell(0).getNumericCellValue()).longValue();
 			if (id.equals(jobId)) {
 				row.getCell(3).setCellValue("Y");
+				row.getCell(5).setCellValue(localDate);
 			}
 		}
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

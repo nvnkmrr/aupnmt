@@ -17,11 +17,11 @@ import com.aupnmt.configuraion.JwtTokenUtil;
 import com.aupnmt.dto.AccessToken;
 import com.aupnmt.dto.Otp;
 import com.aupnmt.dto.Response;
+import com.aupnmt.service.CommonService;
 import com.aupnmt.service.OtpService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 
 @RestController
 @Tag(name = "OTP", description = "OTP APIs")
@@ -38,6 +38,9 @@ public class OTPController {
 
 	@Autowired
 	OtpService otpService;
+
+	@Autowired
+	CommonService commonService;
 
 	@PostMapping("/otpGenerate")
 	public Response otpGenerate(@RequestBody Otp otpp) {
@@ -61,17 +64,20 @@ public class OTPController {
 			authenticate(Otp.getPhoneNumber(), Otp.getOtp().toString());
 			final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(Otp.getPhoneNumber());
 			final String token = jwtTokenUtil.generateToken(userDetails);
-			AccessToken accessToken = new AccessToken();
+			AccessToken accessToken = commonService.userIdentification(Otp.getPhoneNumber());
+			if (accessToken.getRole() != null) {
+				accessToken.setApplicationSubmittedStatus(true);
+			} else {
+				accessToken.setApplicationSubmittedStatus(false);
+			}
 			accessToken.setAccessToken(token);
 			response.setData(accessToken);
 			response.setMessage("OTP verified successfully to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Success");
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
 			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		}

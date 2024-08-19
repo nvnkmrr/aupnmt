@@ -8,8 +8,6 @@ public class Jobs {
 	private String jobPostedBy;
 	private String jobDetails;
 	private boolean active;
-	private LocalDate createdDt;
-	private LocalDate modifiedDt;
 
 	public Long getJobId() {
 		return jobId;
@@ -41,22 +39,6 @@ public class Jobs {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public LocalDate getCreatedDt() {
-		return createdDt;
-	}
-
-	public void setCreatedDt(LocalDate createdDt) {
-		this.createdDt = createdDt;
-	}
-
-	public LocalDate getModifiedDt() {
-		return modifiedDt;
-	}
-
-	public void setModifiedDt(LocalDate modifiedDt) {
-		this.modifiedDt = modifiedDt;
 	}
 
 }

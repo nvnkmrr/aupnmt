@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.CellType;
@@ -46,6 +47,7 @@ public class OwnerServiceImpl implements OwnerService {
 		Sheet sheet = workbook.getSheet("Owner");
 		int lastRowNumber = sheet.getLastRowNum();
 		Long newId = 0L;
+		LocalDate localDate = LocalDate.now();
 
 		Iterator<Row> iterator = sheet.rowIterator();
 		while (iterator.hasNext()) {
@@ -74,8 +76,8 @@ public class OwnerServiceImpl implements OwnerService {
 		row.createCell(10).setCellValue(owner.getPermanentAddress());
 		row.createCell(11).setCellValue("");
 		row.createCell(12).setCellValue(owner.getPremiumUser().equals(true) ? "Y" : "N");
-		row.createCell(13).setCellValue(owner.getCreatedDt());
-		row.createCell(14).setCellValue(owner.getModifiedDt());
+		row.createCell(13).setCellValue(localDate);
+		row.createCell(14).setCellValue(localDate);
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		workbook.write(bos);

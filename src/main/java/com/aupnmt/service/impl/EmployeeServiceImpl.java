@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.CellType;
@@ -47,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Sheet sheet = workbook.getSheet("Employee");
 		int lastRowNumber = sheet.getLastRowNum();
 		Long newId = 0L;
+		LocalDate localDate = LocalDate.now();
 
 		Iterator<Row> iterator = sheet.rowIterator();
 		while (iterator.hasNext()) {
@@ -76,8 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		row.createCell(11).setCellValue(employee.getPermanentAddress());
 		row.createCell(12).setCellValue("");
 		row.createCell(13).setCellValue(employee.getPremiumUser().equals(true) ? "Y" : "N");
-		row.createCell(14).setCellValue(employee.getCreatedDt());
-		row.createCell(15).setCellValue(employee.getModifiedDt());
+		row.createCell(14).setCellValue(localDate);
+		row.createCell(15).setCellValue(localDate);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		workbook.write(bos);
 		blobClient.upload(new ByteArrayInputStream(bos.toByteArray()));

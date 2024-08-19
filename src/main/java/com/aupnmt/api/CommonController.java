@@ -3,6 +3,7 @@ package com.aupnmt.api;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -40,6 +41,9 @@ public class CommonController {
 
 	@Autowired
 	OtpService otpService;
+	
+	@Autowired
+	CacheManager cacheManager;
 
 	@GetMapping(value = "/login")
 	public Response login(@RequestParam String phoneNumber) {
@@ -47,11 +51,13 @@ public class CommonController {
 		try {
 			AccessToken accessToken = commonService.userIdentification(phoneNumber);
 			if (accessToken.getRole() != null) {
+				cacheManager.getCache("default").evictIfPresent(phoneNumber);
 				Integer otp = otpService.generateOTP(phoneNumber, false);
 				authenticate(phoneNumber, otp.toString());
 				final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(phoneNumber);
 				final String token = jwtTokenUtil.generateToken(userDetails);
 				accessToken.setAccessToken(token);
+				accessToken.setApplicationSubmittedStatus(true);
 				response.setData(accessToken);
 				response.setMessage("Logged in successfully for the Phone Number: " + phoneNumber);
 				response.setStatus("Success");
@@ -60,11 +66,9 @@ public class CommonController {
 				response.setStatus("Failure");
 			}
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		}
