@@ -6,6 +6,7 @@ public class AccessToken {
 	private String role;
 	private boolean premiumUser;
 	private boolean applicationSubmittedStatus;
+	private String name;
 
 	public String getAccessToken() {
 		return accessToken;
@@ -38,6 +39,13 @@ public class AccessToken {
 	public void setApplicationSubmittedStatus(boolean applicationSubmittedStatus) {
 		this.applicationSubmittedStatus = applicationSubmittedStatus;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

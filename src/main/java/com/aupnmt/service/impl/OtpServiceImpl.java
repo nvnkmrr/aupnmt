@@ -36,14 +36,9 @@ public class OtpServiceImpl implements OtpService {
 
 	@Cacheable(value = "default", key = "#phoneNumber")
 	@Override
-	public int generateOTP(String phoneNumber, Boolean flag) {
-		int otp = 0;
+	public int generateOTP(String phoneNumber, Boolean flag) throws Exception{
+		int otp = (100000 + new Random().nextInt(900000));
 		if (flag) {
-			otp = (100000 + new Random().nextInt(900000));
-		} else {
-			otp = 000000;
-		}
-		if (otp != 0) {
 			String response = sendOTP(otp, phoneNumber);
 			if (response.equalsIgnoreCase("Failure")) {
 				return 0;
@@ -52,7 +47,7 @@ public class OtpServiceImpl implements OtpService {
 		return otp;
 	}
 
-	public String sendOTP(Integer otp, String phoneNumber) {
+	public String sendOTP(Integer otp, String phoneNumber) throws Exception{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,12 +64,16 @@ public class OtpServiceImpl implements OtpService {
 		} catch (JsonProcessingException e) {
 			return "Failure";
 		}
-		HttpEntity<String> entity = new HttpEntity<String>(requestBody, headers);
-		ResponseEntity<String> response = restTemplate.postForEntity(otpServiceproviderUrl, entity, String.class);
-		if (response.getBody().contains("SMS sent successfully")) {
-			return "Success";
-		} else {
-			return "Failure";
+		try {
+			HttpEntity<String> entity = new HttpEntity<String>(requestBody, headers);
+			ResponseEntity<String> response = restTemplate.postForEntity(otpServiceproviderUrl, entity, String.class);
+			if (response.getBody().contains("SMS sent successfully")) {
+				return "Success";
+			} else {
+				return "Failure";
+			}
+		}catch(Exception e) {
+			throw e;
 		}
 	}
 

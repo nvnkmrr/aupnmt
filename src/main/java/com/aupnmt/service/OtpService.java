@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OtpService {
 
-	int generateOTP(String phoneNumber, Boolean flag);
+	int generateOTP(String phoneNumber, Boolean flag) throws Exception;
 
 }

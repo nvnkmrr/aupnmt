@@ -30,21 +30,26 @@ public class CommonServiceImpl implements CommonService {
 		if (employeeIdentification.equalsIgnoreCase("SuccessY")) {
 			accessToken.setRole("EMPLOYEE");
 			accessToken.setPremiumUser(true);
+			accessToken.setName(employeeService.employee(phoneNumber).getName());
 		} else if (employeeIdentification.equalsIgnoreCase("SuccessN")) {
 			accessToken.setRole("EMPLOYEE");
 			accessToken.setPremiumUser(false);
+			accessToken.setName(employeeService.employee(phoneNumber).getName());
 		}
 
 		if (ownerIdentification.equalsIgnoreCase("SuccessY")) {
 			accessToken.setRole("OWNER");
 			accessToken.setPremiumUser(true);
+			accessToken.setName(ownerService.owner(phoneNumber).getName());
 		} else if (ownerIdentification.equalsIgnoreCase("SuccessN")) {
 			accessToken.setRole("OWNER");
 			accessToken.setPremiumUser(false);
+			accessToken.setName(ownerService.owner(phoneNumber).getName());
 		}
 
 		if (adminIdentification.equalsIgnoreCase("Success")) {
 			accessToken.setRole("ADMIN");
+			accessToken.setName(adminService.admin(phoneNumber).getName());
 		}
 
 		return accessToken;
