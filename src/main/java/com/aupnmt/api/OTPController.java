@@ -90,9 +90,11 @@ public class OTPController {
 			response.setMessage("OTP verified successfully to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Success");
 		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setMessage("OTP verification is failed to the Phone Number: " + Otp.getPhoneNumber());
 			response.setStatus("Failure");
 		}
