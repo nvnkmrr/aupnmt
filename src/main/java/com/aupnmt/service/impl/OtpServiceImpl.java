@@ -38,12 +38,12 @@ public class OtpServiceImpl implements OtpService {
 	@Override
 	public int generateOTP(String phoneNumber, Boolean flag) throws Exception{
 		int otp = (100000 + new Random().nextInt(900000));
-		if (flag) {
-			String response = sendOTP(otp, phoneNumber);
-			if (response.equalsIgnoreCase("Failure")) {
-				return 0;
-			}
-		}
+//		if (flag) {
+//			String response = sendOTP(otp, phoneNumber);
+//			if (response.equalsIgnoreCase("Failure")) {
+//				return 0;
+//			}
+//		}
 		return otp;
 	}
 

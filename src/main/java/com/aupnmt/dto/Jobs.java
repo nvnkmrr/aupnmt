@@ -8,6 +8,7 @@ public class Jobs {
 	private String jobPostedBy;
 	private String jobDetails;
 	private boolean active;
+	private LocalDate modifiedDate;
 
 	public Long getJobId() {
 		return jobId;
@@ -41,4 +42,12 @@ public class Jobs {
 		this.active = active;
 	}
 
+	public LocalDate getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(LocalDate modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+	
 }
