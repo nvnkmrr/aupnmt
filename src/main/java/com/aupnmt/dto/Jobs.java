@@ -9,6 +9,7 @@ public class Jobs {
 	private String jobDetails;
 	private boolean active;
 	private LocalDate modifiedDate;
+	
 
 	public Long getJobId() {
 		return jobId;
