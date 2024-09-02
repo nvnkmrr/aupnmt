@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -92,6 +94,7 @@ public class JobsServiceImpl implements JobsService {
 					job.setJobPostedBy(row.getCell(1).toString());
 					job.setJobDetails(row.getCell(2).toString());
 					job.setActive(row.getCell(3).toString().equalsIgnoreCase("Y") ? true : false);
+					job.setModifiedDate((row.getCell(5).getDateCellValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 					jobs.add(job);
 				}
 			} else {
@@ -101,10 +104,12 @@ public class JobsServiceImpl implements JobsService {
 					job.setJobPostedBy(row.getCell(1).toString());
 					job.setJobDetails(row.getCell(2).toString());
 					job.setActive(row.getCell(3).toString().equalsIgnoreCase("Y") ? true : false);
+					job.setModifiedDate((row.getCell(5).getDateCellValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 					jobs.add(job);
 				}
 			}
 		}
+		Collections.sort(jobs, new JobsComparator());
 		return jobs;
 	}
 
@@ -121,6 +126,7 @@ public class JobsServiceImpl implements JobsService {
 				rowIterator.next();
 				skipHeader = false;
 			}
+			
 
 			Row row = (Row) rowIterator.next();
 			if (row.getCell(1).toString().equalsIgnoreCase(phoneNumber)) {
