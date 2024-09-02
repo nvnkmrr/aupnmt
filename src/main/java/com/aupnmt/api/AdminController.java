@@ -38,9 +38,11 @@ public class AdminController {
 			}
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to fetch the admin record");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to fetch the admin record");
 		}

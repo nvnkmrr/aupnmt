@@ -66,9 +66,11 @@ public class CommonController {
 				response.setStatus("Failure");
 			}
 		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setMessage("Logging in is failed to the Phone Number: " + phoneNumber);
 			response.setStatus("Failure");
 		}

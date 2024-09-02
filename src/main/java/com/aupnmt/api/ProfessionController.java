@@ -27,10 +27,12 @@ public class ProfessionController {
 			r.setData(professionsService.professions());
 			r.setStatus("Success");
 			r.setMessage("Active professions list");
-		} catch (IOException e) {;
+		} catch (IOException e) {
+			e.printStackTrace();
 			r.setStatus("Failure");
 			r.setMessage("Failed to fetch Active professions list");
 		} catch (Exception e) {
+			e.printStackTrace();
 			r.setStatus("Failure");
 			r.setMessage("Failed to fetch Active professions list");
 		}

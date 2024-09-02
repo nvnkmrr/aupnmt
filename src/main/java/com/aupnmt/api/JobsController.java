@@ -33,9 +33,11 @@ public class JobsController {
 			response.setMessage(responseData);
 			response.setStatus("Success");
 		} catch (IOException e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new job");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new job");
 		}
@@ -50,9 +52,11 @@ public class JobsController {
 			r.setStatus("Success");
 			r.setMessage("Active Jobs list");
 		} catch (IOException e) {
+			e.printStackTrace();
 			r.setStatus("Failure");
 			r.setMessage("Failed to fetch Active Jobs list");
 		} catch (Exception e) {
+			e.printStackTrace();
 			r.setStatus("Failure");
 			r.setMessage("Failed to fetch Active Jobs list");
 		}

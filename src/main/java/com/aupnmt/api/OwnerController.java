@@ -36,9 +36,11 @@ public class OwnerController {
 			else
 				response.setStatus("Success");
 		} catch (IOException e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new owner");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to save/create a new owner");
 		}
@@ -60,9 +62,11 @@ public class OwnerController {
 			}
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to fetch the owner record");
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus("Failure");
 			response.setMessage("Failed to fetch the owner record");
 		}
