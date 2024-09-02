@@ -1,7 +1,5 @@
 package com.aupnmt.dto;
 
-import java.time.LocalDate;
-
 public class Employee {
 
 	private Long employeeId;

@@ -57,7 +57,6 @@ public class OTPController {
 			cacheManager.getCache("default").evictIfPresent(otpp.getPhoneNumber());
 			Integer otp = otpService.generateOTP(otpp.getPhoneNumber(), true);
 			System.out.println(otp);
-
 			if (otp != 0) {
 				response.setMessage(
 						"OTP generated and sent successfully to the Phone Number: " + otpp.getPhoneNumber());
@@ -104,7 +103,6 @@ public class OTPController {
 	private void authenticate(String username, String password) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
-
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
