@@ -40,7 +40,7 @@ public class CommonServiceImpl implements CommonService {
 		String ownerName = "";
 		String adminName = "";
 		if(Objects.isNull(workbook))
-			azureStorageServiceImpl.readDatabase();
+			workbook = azureStorageServiceImpl.readDatabase();
 		XSSFSheet xSSFSheet = workbook.getSheet("Employee");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;
