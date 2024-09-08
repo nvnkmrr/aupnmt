@@ -1,6 +1,7 @@
 package com.aupnmt.service.impl;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -30,7 +31,7 @@ public class CommonServiceImpl implements CommonService {
 	AzureStorageServiceImpl azureStorageServiceImpl;
 
 	@Override
-	public AccessToken userIdentification(String phoneNumber) throws Exception {
+	public AccessToken userIdentification(String phoneNumber, XSSFWorkbook workbook) throws Exception {
 		AccessToken accessToken = new AccessToken();
 		String employeeIdentification = "";
 		String ownerIdentification = "";
@@ -38,7 +39,8 @@ public class CommonServiceImpl implements CommonService {
 		String employeeName = "";
 		String ownerName = "";
 		String adminName = "";
-		XSSFWorkbook workbook = azureStorageServiceImpl.readDatabase();
+		if(Objects.isNull(workbook))
+			azureStorageServiceImpl.readDatabase();
 		XSSFSheet xSSFSheet = workbook.getSheet("Employee");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
 		boolean skipHeader = true;

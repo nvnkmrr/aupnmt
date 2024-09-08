@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.aupnmt.dto.AccessToken;
 import com.aupnmt.dto.Jobs;
+import com.aupnmt.service.CommonService;
 import com.aupnmt.service.JobsService;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
@@ -41,6 +43,9 @@ public class JobsServiceImpl implements JobsService {
 
 	@Value("${azure.storage.blob.filename}")
 	private String filename;
+	
+	@Autowired
+	CommonService commonService;
 
 	@Override
 	public String job(Jobs jobs) throws IOException, URISyntaxException {
@@ -95,6 +100,9 @@ public class JobsServiceImpl implements JobsService {
 					job.setJobDetails(row.getCell(2).toString());
 					job.setActive(row.getCell(3).toString().equalsIgnoreCase("Y") ? true : false);
 					job.setModifiedDate((row.getCell(5).getDateCellValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					AccessToken accessToken = commonService.userIdentification(job.getJobPostedBy(), workbook);
+					job.setName(accessToken.getName());
+					job.setRole(accessToken.getRole());
 					jobs.add(job);
 				}
 			} else {
@@ -105,6 +113,9 @@ public class JobsServiceImpl implements JobsService {
 					job.setJobDetails(row.getCell(2).toString());
 					job.setActive(row.getCell(3).toString().equalsIgnoreCase("Y") ? true : false);
 					job.setModifiedDate((row.getCell(5).getDateCellValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					AccessToken accessToken = commonService.userIdentification(job.getJobPostedBy(), workbook);
+					job.setName(accessToken.getName());
+					job.setRole(accessToken.getRole());
 					jobs.add(job);
 				}
 			}
@@ -126,7 +137,6 @@ public class JobsServiceImpl implements JobsService {
 				rowIterator.next();
 				skipHeader = false;
 			}
-			
 
 			Row row = (Row) rowIterator.next();
 			if (row.getCell(1).toString().equalsIgnoreCase(phoneNumber)) {
@@ -135,6 +145,10 @@ public class JobsServiceImpl implements JobsService {
 				job.setJobPostedBy(row.getCell(1).toString());
 				job.setJobDetails(row.getCell(2).toString());
 				job.setActive(row.getCell(3).toString().equalsIgnoreCase("Y") ? true : false);
+				job.setModifiedDate((row.getCell(5).getDateCellValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				AccessToken accessToken = commonService.userIdentification(job.getJobPostedBy(), workbook);
+				job.setName(accessToken.getName());
+				job.setRole(accessToken.getRole());
 				jobs.add(job);
 			}
 		}

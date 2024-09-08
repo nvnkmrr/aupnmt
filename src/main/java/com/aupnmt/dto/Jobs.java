@@ -9,7 +9,8 @@ public class Jobs {
 	private String jobDetails;
 	private boolean active;
 	private LocalDate modifiedDate;
-	
+	private String role;
+	private String name;
 
 	public Long getJobId() {
 		return jobId;
@@ -50,5 +51,21 @@ public class Jobs {
 	public void setModifiedDate(LocalDate modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

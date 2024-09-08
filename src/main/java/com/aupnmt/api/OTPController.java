@@ -79,7 +79,7 @@ public class OTPController {
 			authenticate(Otp.getPhoneNumber(), Otp.getOtp().toString());
 			final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(Otp.getPhoneNumber());
 			final String token = jwtTokenUtil.generateToken(userDetails);
-			AccessToken accessToken = commonService.userIdentification(Otp.getPhoneNumber());
+			AccessToken accessToken = commonService.userIdentification(Otp.getPhoneNumber(),null);
 			if (accessToken.getRole() != null) {
 				accessToken.setApplicationSubmittedStatus(true);
 			} else {

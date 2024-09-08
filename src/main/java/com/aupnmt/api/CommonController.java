@@ -49,7 +49,7 @@ public class CommonController {
 	public Response login(@RequestParam String phoneNumber) {
 		Response response = new Response();
 		try {
-			AccessToken accessToken = commonService.userIdentification(phoneNumber);
+			AccessToken accessToken = commonService.userIdentification(phoneNumber,null);
 			if (accessToken.getRole() != null) {
 				cacheManager.getCache("default").evictIfPresent(phoneNumber);
 				Integer otp = otpService.generateOTP(phoneNumber, false);
