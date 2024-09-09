@@ -88,9 +88,9 @@ public class CommonServiceImpl implements CommonService {
 			}
 			if (rowIterator.hasNext()) {
 				Row row = (Row) rowIterator.next();
-				adminName = row.getCell(1).toString();
 				if (row.getCell(2).toString().equalsIgnoreCase(phoneNumber)) {
 					adminIdentification = "Success";
+					adminName = row.getCell(1).toString();
 				}
 			}
 		}
