@@ -1,5 +1,6 @@
 package com.aupnmt.api;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +43,7 @@ public class CommonController {
 
 	@Autowired
 	OtpService otpService;
-	
+
 	@Autowired
 	CacheManager cacheManager;
 
@@ -49,7 +51,7 @@ public class CommonController {
 	public Response login(@RequestParam String phoneNumber) {
 		Response response = new Response();
 		try {
-			AccessToken accessToken = commonService.userIdentification(phoneNumber,null);
+			AccessToken accessToken = commonService.userIdentification(phoneNumber, null);
 			if (accessToken.getRole() != null) {
 				cacheManager.getCache("default").evictIfPresent(phoneNumber);
 				Integer otp = otpService.generateOTP(phoneNumber, false);
@@ -75,6 +77,27 @@ public class CommonController {
 			response.setStatus("Failure");
 		}
 		return response;
+	}
+
+	@PutMapping("/user/delete")
+	public Response delete(@RequestParam String phoneNumber) {
+		Response r = new Response();
+		try {
+			String response = commonService.userIdentificationAndDelete(phoneNumber, null);
+			if (response.contains("Cannot")) {
+				r.setStatus("Failure");
+			} else {
+				r.setStatus("Success");
+			}
+			r.setMessage(response);
+		} catch (IOException e) {
+			r.setStatus("Failure");
+			r.setMessage("Failed to delete User with Phone Number: " + phoneNumber);
+		} catch (Exception e) {
+			r.setStatus("Failure");
+			r.setMessage("Failed to delete User with Phone Number: " + phoneNumber);
+		}
+		return r;
 	}
 
 	private void authenticate(String username, String password) throws Exception {

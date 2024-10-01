@@ -9,5 +9,7 @@ import com.aupnmt.dto.AccessToken;
 public interface CommonService {
 
 	AccessToken userIdentification(String phoneNumber, XSSFWorkbook workbook) throws Exception;
+	
+	String userIdentificationAndDelete(String phoneNumber, XSSFWorkbook workbook) throws Exception;
 
 }

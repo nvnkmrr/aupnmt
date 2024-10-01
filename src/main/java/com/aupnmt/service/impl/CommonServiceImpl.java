@@ -39,7 +39,7 @@ public class CommonServiceImpl implements CommonService {
 		String employeeName = "";
 		String ownerName = "";
 		String adminName = "";
-		if(Objects.isNull(workbook))
+		if (Objects.isNull(workbook))
 			workbook = azureStorageServiceImpl.readDatabase();
 		XSSFSheet xSSFSheet = workbook.getSheet("Employee");
 		Iterator<Row> rowIterator = xSSFSheet.iterator();
@@ -119,6 +119,61 @@ public class CommonServiceImpl implements CommonService {
 			accessToken.setName(adminName);
 		}
 		return accessToken;
+	}
+
+	@Override
+	public String userIdentificationAndDelete(String phoneNumber, XSSFWorkbook workbook) throws Exception {
+		if (Objects.isNull(workbook))
+			workbook = azureStorageServiceImpl.readDatabase();
+		XSSFSheet xSSFSheet = workbook.getSheet("Employee");
+		Iterator<Row> rowIterator = xSSFSheet.iterator();
+		boolean skipHeader = true;
+		boolean proceedFurther = true;
+		while (rowIterator.hasNext() && proceedFurther) {
+			// skipping header
+			if (skipHeader) {
+				rowIterator.next();
+				skipHeader = false;
+			}
+			if (rowIterator.hasNext()) {
+				Row row = (Row) rowIterator.next();
+				if (row.getCell(2).toString().equalsIgnoreCase(phoneNumber)) {
+					proceedFurther = false;
+					deleteAndShiftRow(xSSFSheet, row);
+				}
+			}
+		}
+
+		xSSFSheet = workbook.getSheet("Owner");
+		rowIterator = xSSFSheet.iterator();
+		skipHeader = true;
+		while (rowIterator.hasNext() && proceedFurther) {
+			// skipping header
+			if (skipHeader) {
+				rowIterator.next();
+				skipHeader = false;
+			}
+			if (rowIterator.hasNext()) {
+				Row row = (Row) rowIterator.next();
+				if (row.getCell(2).toString().equalsIgnoreCase(phoneNumber)) {
+					proceedFurther = false;
+					deleteAndShiftRow(xSSFSheet, row);
+				}
+			}
+		}
+		if(!proceedFurther)
+			return "Successfully deleted the user with phone number: "+phoneNumber;	
+		else
+			return "Cannot find the user with phone number: "+phoneNumber;
+	}
+
+	public void deleteAndShiftRow(XSSFSheet xSSFSheet, Row row) {
+		xSSFSheet.removeRow(row); // this only deletes all the cell values
+		int rowIndex = row.getRowNum();
+		int lastRowNum = xSSFSheet.getLastRowNum();
+		if (rowIndex >= 0 && rowIndex < lastRowNum) {
+			xSSFSheet.shiftRows(rowIndex + 1, lastRowNum, -1);
+		}
 	}
 
 }

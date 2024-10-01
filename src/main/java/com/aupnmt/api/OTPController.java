@@ -55,7 +55,12 @@ public class OTPController {
 		Response response = new Response();
 		try {
 			cacheManager.getCache("default").evictIfPresent(otpp.getPhoneNumber());
-			Integer otp = otpService.generateOTP(otpp.getPhoneNumber(), true);
+			Integer otp;
+			if(otpp.getPhoneNumber().equalsIgnoreCase("1000000000")) {
+				otp = otpService.generateOTP(otpp.getPhoneNumber(), false);
+			}else {
+				otp = otpService.generateOTP(otpp.getPhoneNumber(), true);
+			}
 			System.out.println(otp);
 			
 			if (otp != 0) {
