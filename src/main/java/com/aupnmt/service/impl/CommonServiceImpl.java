@@ -168,8 +168,8 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	public void deleteAndShiftRow(XSSFSheet xSSFSheet, Row row) {
-		xSSFSheet.removeRow(row); // this only deletes all the cell values
 		int rowIndex = row.getRowNum();
+		xSSFSheet.removeRow(row); // this only deletes all the cell values
 		int lastRowNum = xSSFSheet.getLastRowNum();
 		if (rowIndex >= 0 && rowIndex < lastRowNum) {
 			xSSFSheet.shiftRows(rowIndex + 1, lastRowNum, -1);

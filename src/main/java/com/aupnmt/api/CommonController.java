@@ -23,6 +23,7 @@ import com.aupnmt.service.CommonService;
 import com.aupnmt.service.OtpService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -80,6 +81,7 @@ public class CommonController {
 	}
 
 	@PostMapping("/user/delete")
+	@SecurityRequirement(name = "Authorization")
 	public Response delete(@RequestParam String phoneNumber) {
 		Response r = new Response();
 		try {
@@ -94,6 +96,7 @@ public class CommonController {
 			r.setStatus("Failure");
 			r.setMessage("Failed to delete User with Phone Number: " + phoneNumber);
 		} catch (Exception e) {
+			e.printStackTrace();
 			r.setStatus("Failure");
 			r.setMessage("Failed to delete User with Phone Number: " + phoneNumber);
 		}
